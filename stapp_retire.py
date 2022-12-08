@@ -272,7 +272,7 @@ def main():
 
             # 正解率を出力
             st.caption('決定木の予測')
-            st.subheader(f"正解率:{")
+            st.subheader()
 
             # 決定木のツリーを出力
             
