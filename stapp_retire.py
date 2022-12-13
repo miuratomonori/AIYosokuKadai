@@ -272,10 +272,10 @@ def main():
 
             # 正解率を出力
             st.caption('決定木の予測')
-            st.subheader()
+            st.subheader(train_scores)
 
             # 決定木のツリーを出力
-            
+            st_display_dtree(clf,"退職")
 
         else:
             st.subheader('訓練用データをアップロードしてください')
