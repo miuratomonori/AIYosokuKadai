@@ -262,8 +262,7 @@ def main():
                 
 
             elif line == '月給(ドル)':
-                df=plt.xticks(np.arange(2500,2000,2500))
-                st_display_graph(df,'月給')
+                st_display_graph(df,'月給(ドル)')
 
 
         else:
