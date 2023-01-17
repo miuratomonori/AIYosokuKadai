@@ -264,7 +264,7 @@ def main():
             elif line == '月給(ドル)':
                 #plt.xlim(2500,20000)
                 #plt.ylim()
-                st_display_graph(df,'月給')
+                st_display_graph(df,'月給(ドル)')
 
 
         else:
