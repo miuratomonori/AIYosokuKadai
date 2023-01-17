@@ -110,7 +110,7 @@ def st_display_graph(df: pd.DataFrame, x_col : str):
     plt.grid(True)              # 目盛線を表示する
 
     # グラフ（ヒストグラム）の設定
-    sns.countplot(data=df, x=x_col, ax=ax)
+    sns.countplot(data=df, x=x_col,ax=ax)
 
     st.pyplot(fig)              # Streamlitでグラフを表示する
 
@@ -249,9 +249,32 @@ def main():
             # セッションステートに退避していたデータフレームを復元
             df = copy.deepcopy(st.session_state.df)
 
-            # グラフの表示
-            st_display_graph()
-            
+            #グラフのX軸の設定セレクトボックス
+            line_x=['退職','年齢','月給(ドル)']
+            line=st.sidebar.selectbox("グラフのX軸",line_x)
+
+            if line == '退職':
+                # グラフの表示
+                st_display_graph(df,"退職")
+
+            elif line == '年齢':
+                st_display_graph(df,'年齢')
+                
+
+            elif line == '月給(ドル)':
+
+                left=np.array([2500,5000,7500,10000,12500,15000,17500,20000])
+                height=np.array([50,100,150,200,250,300,350])
+                plt.bar(left,height)
+                #st_display_graph(df,'月給(ドル)')
+                fig, ax = plt.subplots()    # グラフの描画領域を準備
+                plt.grid(True)              # 目盛線を表示する
+
+                # グラフ（ヒストグラム）の設定
+                sns.countplot(data=df, x="月給(ドル)",ax=ax,kwargs=bar)
+
+                st.pyplot(fig)
+
         else:
             st.subheader('訓練用データをアップロードしてください')
 
@@ -263,22 +286,47 @@ def main():
             # セッションステートに退避していたデータフレームを復元
             df = copy.deepcopy(st.session_state.df)
 
+            #決定木の深さ選択
+            deep_num=[2,3,4]
+            deep=st.sidebar.selectbox('決定木の深さ(負荷軽減の為最大3)',deep_num)
+
             # 説明変数と目的変数の設定
             train_X = df.drop("退職", axis=1)   # 退職列以外を説明変数にセット
             train_Y = df["退職"]                # 退職列を目的変数にセット
 
             # 決定木による予測
-            clf, train_pred, train_scores = ml_dtree(train_X, train_Y, 2)
+            if deep == 2:
+                clf, train_pred, train_scores = ml_dtree(train_X, train_Y, 2)
+                # 決定木のツリーを出力
+                st_display_dtree(clf,train_X.columns)
 
-            # 正解率を出力
-            st.caption('決定木の予測')
-            st.subheader(train_scores)
+                # 正解率を出力
+                st.caption('決定木の予測')
+                st.subheader(f"正解率：{train_scores}")
 
-            # 決定木のツリーを出力
-            st_display_dtree(clf,"退職")
+            elif deep == 3:
+                clf, train_pred, train_scores =ml_dtree(train_X,train_Y,3)
+                st_display_dtree(clf,train_X.columns)
+
+                # 正解率を出力
+                st.caption('決定木の予測')
+                st.subheader(f"正解率：{train_scores}")
+
+            
 
         else:
             st.subheader('訓練用データをアップロードしてください')
+
+    if choice == "About":
+
+        #ロゴマークの表示
+        image=Image.open("logo_nail.png")
+        st.image(image,use_column_width=True)
+
+        #制作者、バージョン、ホームページリンクの表示
+        st.caption("Build by [Nail Team")
+        st.caption("Version:0.3")
+        st.caption("For More Information Check Out [https://nai-lab.com/]")
         
 
 if __name__ == "__main__":
