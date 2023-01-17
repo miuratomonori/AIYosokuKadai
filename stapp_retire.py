@@ -262,18 +262,10 @@ def main():
                 
 
             elif line == '月給(ドル)':
+                #plt.xlim(2500,20000)
+                #plt.ylim()
+                st_display_graph(df,'月給')
 
-                left=np.array([2500,5000,7500,10000,12500,15000,17500,20000])
-                height=np.array([50,100,150,200,250,300,350])
-                plt.bar(left,height)
-                #st_display_graph(df,'月給(ドル)')
-                fig, ax = plt.subplots()    # グラフの描画領域を準備
-                plt.grid(True)              # 目盛線を表示する
-
-                # グラフ（ヒストグラム）の設定
-                sns.countplot(data=df, x="月給(ドル)",ax=ax,kwargs=bar)
-
-                st.pyplot(fig)
 
         else:
             st.subheader('訓練用データをアップロードしてください')
@@ -287,7 +279,7 @@ def main():
             df = copy.deepcopy(st.session_state.df)
 
             #決定木の深さ選択
-            deep_num=[2,3,4]
+            deep_num=[2,3]
             deep=st.sidebar.selectbox('決定木の深さ(負荷軽減の為最大3)',deep_num)
 
             # 説明変数と目的変数の設定
